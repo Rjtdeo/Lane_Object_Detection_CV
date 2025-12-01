@@ -1,0 +1,38 @@
+Documentation
+
+1. Overview
+The project integrates two major components:
+- Lane detection (Classical CV)
+- Object detection (YOLOv8)
+
+Both components are merged into a single inference script that generates an annotated driving video.
+
+2. Lane Detection
+Lane detection is implemented using:
+- Grayscale conversion
+- Region of Interest masking (lower half of image)
+- Canny edge detection
+- Hough Transform to extract lane segments
+The detected lanes are drawn as blue lines over the original frame.
+
+3. Object Detection
+A YOLOv8n model was trained using auto labeled nuScenes images. The model predicts:
+- Cars, buses, trucks, motorcycles
+- Pedestrians
+- Traffic lights
+
+Bounding boxes and labels are drawn using OpenCV.
+
+4. Multi-Camera Pipeline
+The system processes images from:
+CAM_FRONT, CAM_FRONT_LEFT, CAM_FRONT_RIGHT,
+CAM_BACK, CAM_BACK_LEFT, CAM_BACK_RIGHT.
+
+Frames are sorted and processed sequentially to create a smooth output video.
+
+5. Final Output
+The pipeline:
+- Runs lane + object detection
+- Combines overlays
+- Writes annotated video (MP4)
+- Saves sample frames for documentation
