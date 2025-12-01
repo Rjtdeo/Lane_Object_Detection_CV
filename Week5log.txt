@@ -1,0 +1,11 @@
+Week 5 Log 
+
+This week I completed the full inference pipeline and produced the final annotated video.
+
+Key tasks completed:
+- Combined all camera images into a multi-camera sequence.
+- Added per-frame FPS calculation.
+- Wrote the final video output using OpenCV VideoWriter.
+- Saved sample frames for documentation.
+- Finalized README, documentation, and reproducibility files.
+- Prepared video demo for submission.
