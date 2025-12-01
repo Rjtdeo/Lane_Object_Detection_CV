@@ -1,0 +1,10 @@
+Week 4 Log 
+
+The focus this week was integrating lane detection with object detection.
+
+Key tasks completed:
+- Implemented lane detection using grayscale conversion, ROI masking, Canny edges, 
+  and Hough line detection.
+- Developed an overlay function to draw detected lanes.
+- Combined lane overlay with YOLO detections to create a unified annotated frame.
+- Began writing the multi-camera pipeline to process all nuScenes camera folders.
