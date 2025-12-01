@@ -1,0 +1,56 @@
+Reproducibility Guide
+
+1. Requirements
+Install the required libraries using:
+pip install ultralytics opencv-python numpy torch tqdm
+
+2. Folder Structure
+Lane_Object_Detection_CV/
+│
+├── code/
+│   ├── train/
+│   │   └── generate_best_from_nuscenes_multi.py
+│   └── inference/
+│       └── part3_infer_and_video_multi.py
+│
+├── results/
+├── README.md
+├── description.txt
+├── documentation.txt
+├── reproducibility.txt
+├── week1log.txt
+├── week2log.txt
+├── week3log.txt
+├── week4log.txt
+├── week5log.txt
+└── requirements.txt
+
+3. Training the YOLO Model
+Run:
+python generate_best_from_nuscenes_multi.py
+
+This script:
+- Loads all nuScenes camera folders
+- Auto-labels images
+- Creates dataset.yaml
+- Trains YOLOv8n for 40 epochs
+- Saves best.pt in: runs/vehicle_detector_multi/weights/
+
+4. Running Inference
+Update WEIGHTS_PATH in:
+part3_infer_and_video_multi.py
+
+Then run:
+python part3_infer_and_video_multi.py
+
+This generates:
+output_multi_camera_yolo.mp4
+and sample frames in the results folder.
+
+5. Expected Output
+A fully annotated driving video displaying:
+- Lane boundaries
+- Detected objects with confidence scores
+- FPS information
+
+Anyone following this guide should be able to reproduce the same results.
