@@ -1,7 +1,112 @@
-Description
+Reproducibility Guide
+=====================
 
-This project combines classical computer vision lane detection with a custom-trained YOLOv8n 
-object detector. The system processes real road images from the nuScenes dataset and produces 
-an annotated driving video showing lane boundaries, detected vehicles, pedestrians, traffic 
-lights, and other road objects. The goal of the project is to demonstrate an integrated 
-perception pipeline for autonomous driving use cases.
+This guide explains how to fully reproduce the training process and the final
+lane + object detection output video using the provided code.
+
+
+1. Requirements
+------------------------------------
+
+Install the required Python libraries:
+
+    pip install ultralytics opencv-python numpy torch tqdm
+
+Python version used: 3.10+  
+GPU optional (training runs faster if GPU is available).
+
+
+2. Folder Structure
+------------------------------------
+
+Lane_Object_Detection_CV/
+│
+├── code/
+│   ├── train/
+│   │   └── generate_best_from_nuscenes_multi.py
+│   └── inference/
+│       └── part3_infer_and_video_multi.py
+│
+├── results/
+│
+├── README.md
+├── description.txt
+├── documentation.txt
+├── reproducibility.txt
+├── week1log.txt
+├── week2log.txt
+├── week3log.txt
+├── week4log.txt
+├── week5log.txt
+└── requirements.txt
+
+
+3. Training the YOLO Model 
+------------------------------------
+
+If anyone wants to retrain the YOLO model:
+
+Run:
+
+    python generate_best_from_nuscenes_multi.py
+
+What the script does:
+- Loads all six nuScenes camera folders:
+    CAM_FRONT, CAM_FRONT_LEFT, CAM_FRONT_RIGHT,
+    CAM_BACK, CAM_BACK_LEFT, CAM_BACK_RIGHT
+- Combines them into one dataset
+- Splits images into 80% training / 20% validation
+- Auto-labels images using YOLOv8x (COCO pretrained)
+- Creates dataset.yaml
+- Trains YOLOv8n for 40 epochs
+- Saves the trained model at:
+
+    C:/Users/Rajat/Downloads/runs/vehicle_detector_multi/weights/best.pt
+
+Training is optional because the repository already provides the final model.
+
+
+4. Running the Final Inference Pipeline
+------------------------------------
+
+Update the path inside the script if needed:
+
+In part3_infer_and_video_multi.py:
+
+    WEIGHTS_PATH = r"C:\Users\Rajat\runs\vehicle_detector_multi\weights\best.pt"
+
+Then run:
+
+    python part3_infer_and_video_multi.py
+
+The script will:
+- Load images from all six nuScenes camera folders
+- Perform lane detection (Canny + Hough Transform)
+- Perform object detection using YOLOv8
+- Overlay lanes + bounding boxes + FPS
+- Save an annotated driving video at:
+
+    C:/Users/Rajat/Downloads/output_multi_camera_yolo.mp4
+
+- Save sample frames inside the results folder.
+
+
+5. Expected Output
+------------------------------------
+
+The reproduced results should include:
+- A full annotated driving video showing:
+    • Lane boundaries  
+    • YOLO object detections (cars, buses, trucks, pedestrians, etc.)  
+    • Real-time FPS text overlay  
+- A results folder containing sample output frames
+
+If the dataset paths are correct and dependencies installed, the full pipeline should run without modification.
+
+
+6. Notes
+------------------------------------
+
+- GPU is recommended but not required.
+- The repository already contains logs, documentation, and descriptions for clarity.
+- This project is fully reproducible using the two Python scripts inside `code/`.
