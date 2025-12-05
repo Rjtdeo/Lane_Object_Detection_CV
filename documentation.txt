@@ -1,38 +1,83 @@
 Documentation
+=============
 
 1. Overview
-The project integrates two major components:
-- Lane detection (Classical CV)
-- Object detection (YOLOv8)
-
-Both components are merged into a single inference script that generates an annotated driving video.
+-----------
+This project combines two parts: lane detection and object detection.  
+Both parts run together in one Python script that processes driving images and
+creates an output video. The video shows lane lines, object boxes, and FPS
+information on every frame.
 
 2. Lane Detection
-Lane detection is implemented using:
-- Grayscale conversion
-- Region of Interest masking (lower half of image)
-- Canny edge detection
-- Hough Transform to extract lane segments
-The detected lanes are drawn as blue lines over the original frame.
+-----------------
+The lane detection part uses basic computer vision steps:
+
+- Convert the frame to grayscale
+- Focus only on the bottom part of the image (Region of Interest)
+- Use Canny edge detection to find edges
+- Use Hough Transform to find straight lane lines
+- Draw those lane lines on the frame
+
+This creates a simple visual overlay that highlights the left and right lane
+boundaries.
 
 3. Object Detection
-A YOLOv8n model was trained using auto labeled nuScenes images. The model predicts:
-- Cars, buses, trucks, motorcycles
+-------------------
+For object detection, I trained a YOLOv8n model. The training data came from
+nuScenes camera images, which were auto-labeled using YOLOv8x.
+
+The model can detect:
+- Cars
+- Buses
+- Trucks
+- Motorcycles
 - Pedestrians
 - Traffic lights
 
-Bounding boxes and labels are drawn using OpenCV.
+During inference, the script draws green bounding boxes with class labels and
+confidence values.
 
-4. Multi-Camera Pipeline
-The system processes images from:
-CAM_FRONT, CAM_FRONT_LEFT, CAM_FRONT_RIGHT,
-CAM_BACK, CAM_BACK_LEFT, CAM_BACK_RIGHT.
+4. Multi-Camera Input
+---------------------
+The project uses images from all six nuScenes cameras:
 
-Frames are sorted and processed sequentially to create a smooth output video.
+CAM_FRONT  
+CAM_FRONT_LEFT  
+CAM_FRONT_RIGHT  
+CAM_BACK  
+CAM_BACK_LEFT  
+CAM_BACK_RIGHT  
+
+All images are loaded, sorted, and processed one after another so the final
+video looks smooth and continuous.
 
 5. Final Output
-The pipeline:
-- Runs lane + object detection
-- Combines overlays
-- Writes annotated video (MP4)
-- Saves sample frames for documentation
+---------------
+When the script runs, it:
+
+- Performs lane detection
+- Performs YOLO object detection
+- Combines both overlays
+- Writes out an annotated MP4 video
+- Saves a few sample frames inside the results folder
+
+This makes it easy to show how the system works.
+
+6. Requirements
+---------------
+The project needs these Python libraries:
+
+- ultralytics
+- opencv-python
+- numpy
+- torch
+- tqdm
+
+They can be installed using: pip install ultralytics opencv-python numpy torch tqdm
+
+7. Notes
+--------
+- The lane detection and object detection run separately but are combined in the
+  final image.
+- Training the model is optional because a best.pt file is already available.
+- The script will automatically use a GPU if the system has one.
